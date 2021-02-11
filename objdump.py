@@ -3,15 +3,19 @@ import re
 
 line_re = re.compile('([0-9a-zA-Z]+:)(\\t*\\s*)(([a-zA-Z0-9]{2}\\s?)*)')
 
+
 def hexstr_to_hex(s):
     return hex(int(s, base=16))
+
 
 def parse_offset(n):
     n = n[:-1] if n[-1] == ":" else n
     return hexstr_to_hex(n)
 
+
 def parse_instr_bytes(bytes_str):
     return [hexstr_to_hex(n) for n in bytes_str.split()]
+
 
 def parse_line(line):
     line = line.rstrip('\n').lstrip()
@@ -24,12 +28,13 @@ def parse_line(line):
 
     return offset, instr_bytes
 
+
 def parse(objdump):
-    ret  = []
+    ret = []
     for line in objdump:
         line = line.strip()
         if not line_re.match(line):
             continue
         offset, instr_bytes = parse_line(line)
-        ret.append({"offset": offset, "instr_bytes": instr_bytes })
+        ret.append({"offset": offset, "instr_bytes": instr_bytes})
     return ret
