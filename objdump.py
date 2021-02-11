@@ -22,10 +22,8 @@ def parse_line(line):
 
     return offset, instr_bytes
 
-def parse(stdin):
-    for line in stdin:
+def parse(objdump):
+    for line in objdump:
         offset, instr_bytes = parse_line(line)
         print(offset, instr_bytes)
 
-if __name__ == "__main__":
-    parse(sys.stdin)
