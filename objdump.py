@@ -23,7 +23,8 @@ def parse_line(line):
     return offset, instr_bytes
 
 def parse(objdump):
+    ret  = []
     for line in objdump:
         offset, instr_bytes = parse_line(line)
-        print(offset, instr_bytes)
-
+        ret.append({"offset": offset, "instr_bytes": instr_bytes })
+    return ret

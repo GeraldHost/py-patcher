@@ -1,1 +1,1 @@
-sed -n 8,11p lockcode-dump.txt | python objdump.py
+sed -n 110,114p lockcode-dump.txt | python main.py
