@@ -1,6 +1,8 @@
 import sys
 import re
 
+line_re = re.compile('([0-9a-zA-Z]+:)(\\t*\\s*)(([a-zA-Z0-9]{2}\\s?)*)')
+
 def hexstr_to_hex(s):
     return hex(int(s, base=16))
 
@@ -25,6 +27,9 @@ def parse_line(line):
 def parse(objdump):
     ret  = []
     for line in objdump:
+        line = line.strip()
+        if not line_re.match(line):
+            continue
         offset, instr_bytes = parse_line(line)
         ret.append({"offset": offset, "instr_bytes": instr_bytes })
     return ret
