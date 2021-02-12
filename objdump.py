@@ -16,6 +16,10 @@ def parse_offset(n):
 def parse_instr_bytes(bytes_str):
     return [hexstr_to_hex(n) for n in bytes_str.split()]
 
+def parse_asm(asm_str):
+    asm = asm_str.split('#')[0].strip()
+    print(asm.split(' '))
+    return asm
 
 def parse_line(line):
     line = line.rstrip('\n').lstrip()
@@ -25,8 +29,9 @@ def parse_line(line):
 
     offset = parse_offset(items[0])
     instr_bytes = parse_instr_bytes(items[1])
+    asm = parse_asm(' '.join(items[2:]))
 
-    return offset, instr_bytes
+    return offset, instr_bytes, asm
 
 
 def parse(objdump):
@@ -35,6 +40,6 @@ def parse(objdump):
         line = line.strip()
         if not line_re.match(line):
             continue
-        offset, instr_bytes = parse_line(line)
-        ret.append({"offset": offset, "instr_bytes": instr_bytes})
+        offset, instr_bytes, asm = parse_line(line)
+        ret.append({"offset": offset, "instr_bytes": instr_bytes, "asm": asm })
     return ret
