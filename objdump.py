@@ -1,8 +1,8 @@
 import sys
 import re
 
-line_re = re.compile('([0-9a-zA-Z]+:)(\\t*\\s*)(([a-zA-Z0-9]{2}\\s?)*)')
-
+line_re = re.compile('([0-9a-zA-Z]+:)(\\t*\\s*)(([a-zA-Z0-9]{2}\\s)+)')
+section_title_re = re.compile('[0-9A-Za-z]{16}\\s+<(.*[^>])>')
 
 def hexstr_to_hex(s):
     return hex(int(s, base=16))
@@ -33,13 +33,29 @@ def parse_line(line):
 
     return offset, instr_bytes, asm
 
+def parse_section(line):
+    line = line.strip()
+    items = line.split(' ')
+    
+    name_match = re.match('<(.*[^>])>', items[1])
+    name = name_match.groups()[0]
+    offset = hexstr_to_hex(items[0])
+    
+    return offset, name
 
 def parse(objdump):
-    ret = []
+    ret = {}
+    curr_name = None
     for line in objdump:
         line = line.strip()
-        if not line_re.match(line):
+        if section_title_re.match(line):
+            offset, name = parse_section(line)
+            ret[name] = { "offset": offset, "name": name, "instructions": [] }
+            curr_name = name
+        elif line_re.match(line):
+            print(line)
+            offset, instr_bytes, asm = parse_line(line)
+            ret[curr_name]['instructions'].append({"offset": offset, "instr_bytes": instr_bytes, "asm": asm })
+        else:
             continue
-        offset, instr_bytes, asm = parse_line(line)
-        ret.append({"offset": offset, "instr_bytes": instr_bytes, "asm": asm })
     return ret
