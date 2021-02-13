@@ -1,8 +1,8 @@
 import sys
 from opcodes import OPS
-from objdump import parse
-import json
+from objdump import process 
 
 if __name__ == "__main__":
-    bn = parse(sys.stdin)
-    print(json.dumps(bn))
+    bn = process(sys.stdin)
+    for v in bn.values():
+        print(v.toJSON())
