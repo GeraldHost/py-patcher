@@ -2,7 +2,7 @@ import sys
 import json
 import argparse
 from opcodes import OPS
-from objdump import parse
+from objdump import process 
 from patcher import patch 
 
 def setup():
@@ -20,5 +20,5 @@ if __name__ == "__main__":
 
     target_addr = args.target
 
-    binary = parse(sys.stdin)
+    binary = process(sys.stdin)
     patch(binary, target_addr)

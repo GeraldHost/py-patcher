@@ -1,12 +1,10 @@
 import sys
 import re
 import json
+from utils import hexstr_to_hex
 
 line_re = re.compile('([0-9a-zA-Z]+:)(\\t*\\s*)(([a-zA-Z0-9]{2}\\s)+)')
 section_title_re = re.compile('[0-9A-Za-z]{16}\\s+<(.*[^>])>')
-
-def hexstr_to_hex(s):
-    return hex(int(s, base=16))
 
 # Instruction line
 class Line:
@@ -69,16 +67,16 @@ class Section:
 
 def process(objdump):
     ret = {}
-    curr_name = None
+    curr_offset = None
     for ln in objdump:
         ln = ln.strip()
         if section_title_re.match(ln):
             section = Section(ln)
-            curr_name = section.name
-            ret[curr_name] = section 
+            curr_offset = section.offset
+            ret[curr_offset] = section 
         elif line_re.match(ln):
             line = Line(ln)
-            ret[curr_name].addline(line)
+            ret[curr_offset].addline(line)
         else:
             continue
     return ret
