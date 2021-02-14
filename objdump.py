@@ -39,6 +39,10 @@ class Line:
         asm = asm_str.split('#')[0].strip()
         return asm
 
+    @property
+    def instruction(self):
+        return self.asm.split(' ')[0]
+
 
 # Section line
 class Section:
