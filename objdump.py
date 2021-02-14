@@ -11,7 +11,7 @@ class Line:
     def __init__(self, line_str):
         self.str = line_str
         self.offset = None
-        self.instr_bytes = None
+        self.bytes = None
         self.asm = None
 
         self.parse()
@@ -22,7 +22,7 @@ class Line:
         items = re.split('\\s{2,}', line)
 
         self.offset = self.parse_offset(items[0])
-        self.instr_bytes = self.parse_instr_bytes(items[1])
+        self.bytes = self.parse_bytes(items[1])
         self.asm = self.parse_asm(' '.join(items[2:]))
     
     @staticmethod
@@ -31,7 +31,7 @@ class Line:
         return hexstr_to_hex(n)
     
     @staticmethod
-    def parse_instr_bytes(bytes_str):
+    def parse_bytes(bytes_str):
         return [hexstr_to_hex(n) for n in bytes_str.split()]
     
     @staticmethod
@@ -46,7 +46,7 @@ class Section:
         self.str = line_str
         self.name = None
         self.offset = None
-        self.instructions = []
+        self.lines = []
 
         self.parse()
 
@@ -59,7 +59,7 @@ class Section:
         self.offset = hexstr_to_hex(items[0])
 
     def addline(self, line):
-        self.instructions.append(line)
+        self.lines.append(line)
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__, 
