@@ -1,1 +1,1 @@
-cat lockcode-dump.txt | python main.py --target=0x120a
+python main.py --target=0x120a --file=lockcode-dump.txt

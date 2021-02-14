@@ -92,4 +92,4 @@ def patch(binary, offset):
         'choices': [line.asm for line in patcher.jumps],
     }]
 
-    answers = prompt(questions)
+    prompt(questions)
