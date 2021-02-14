@@ -16,11 +16,21 @@ def setup():
 
     return args
 
+def print_header():
+    print('''
+  ___  _ _____ ___ _  _   __  __ ___   _____ _  _ ___  ___  _   _  ___ _  _ 
+ | _ \/_\_   _/ __| || | |  \/  | __| |_   _| || | _ \/ _ \| | | |/ __| || |
+ |  _/ _ \| || (__| __ | | |\/| | _|    | | | __ |   / (_) | |_| | (_ | __ |
+ |_|/_/ \_\_| \___|_||_| |_|  |_|___|   |_| |_||_|_|_\\___/ \___/ \___|_||_|
+                                                                            
+    ''')
 if __name__ == "__main__":
     args = setup()
 
     target_addr = args.target
     objdump_file = args.file
+    
+    print_header()
 
     with open(objdump_file) as f:
         binary = process(f)

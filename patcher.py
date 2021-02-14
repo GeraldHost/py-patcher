@@ -85,11 +85,24 @@ def patch(binary, offset):
 
     patcher.scan_jumps(section)
 
-    questions = [{
+    select_jump = [{
         'type': 'list',
         'name': 'patch_jump',
-        'message': 'Select jump to patch',
-        'choices': [line.asm for line in patcher.jumps],
+        'message': 'Select jump to patch:',
+        'choices': [line.asm for line in patcher.jumps]
     }]
 
-    prompt(questions)
+    confirm_cont = [{
+        'type': 'confirm',
+        'name': 'continue',
+        'message': 'Do you want to apply another patch?'
+    }]
+    
+    while True:
+        answer = prompt(select_jump)
+        print(f"Applying patch to: {answer}")
+        answer = prompt(confirm_cont)
+        if not answer['continue']:
+            break
+
+    print("[*] Patching complete")
