@@ -2,7 +2,6 @@ import re
 from utils import hexstr_to_hex, hexstr_to_int
 from opcodes import JMP_INSTRUCTIONS
 from objdump import Section
-from whaaaaat import prompt, print_json
 
 class Patcher:
     def __init__(self, binary, offset):
@@ -84,25 +83,4 @@ def patch(binary, offset):
         print("[*] Offset not found")
 
     patcher.scan_jumps(section)
-
-    select_jump = [{
-        'type': 'list',
-        'name': 'patch_jump',
-        'message': 'Select jump to patch:',
-        'choices': [line.asm for line in patcher.jumps]
-    }]
-
-    confirm_cont = [{
-        'type': 'confirm',
-        'name': 'continue',
-        'message': 'Do you want to apply another patch?'
-    }]
-    
-    while True:
-        answer = prompt(select_jump)
-        print(f"Applying patch to: {answer}")
-        answer = prompt(confirm_cont)
-        if not answer['continue']:
-            break
-
-    print("[*] Patching complete")
+    return patcher

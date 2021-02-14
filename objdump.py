@@ -13,6 +13,7 @@ class Line:
         self.offset = None
         self.bytes = None
         self.asm = None
+        self.patched = False
 
         self.parse()
 
