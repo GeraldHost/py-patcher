@@ -3,8 +3,8 @@ import json
 import argparse
 import os
 from opcodes import OPS
-from objdump import process 
-from patcher import patch, write_patch 
+from objdump import process
+from patcher import patch, write_patch
 from whaaaaat import prompt, print_json
 
 header = '''
@@ -15,8 +15,10 @@ header = '''
                                                                             
 '''
 
+
 def setup():
-    parser = argparse.ArgumentParser(description='Automatically patch to a sepcified address')
+    parser = argparse.ArgumentParser(
+        description='Automatically patch to a sepcified address')
     parser.add_argument('-t', '--target', help='Target address to patch to')
     parser.add_argument('-f', '--file', help='Binary file to patch')
     args = parser.parse_args()
@@ -29,12 +31,13 @@ def setup():
 
     return args
 
+
 if __name__ == "__main__":
     args = setup()
 
     target_addr = args.target
     binary_file = args.file
-    
+
     print(header)
 
     with os.popen(f"objdump -M intel -d {binary_file}") as f:
@@ -48,9 +51,13 @@ if __name__ == "__main__":
     }]
 
     jumps_to_patch = []
-    
+
     while True:
-        choices = [{ "name": f"{line.offset} :: {line.asm}", "value": line, "disabled": line.patched } for line in patcher.jumps]
+        choices = [{
+            "name": f"{line.offset} :: {line.asm}",
+            "value": line,
+            "disabled": line.patched
+        } for line in patcher.jumps]
 
         if len(list(filter(lambda x: not x['disabled'], choices))) <= 0:
             break
@@ -70,8 +77,7 @@ if __name__ == "__main__":
         answer = prompt(confirm_cont)
         if not answer['continue']:
             break
-    
+
     print(f"[*] Writing {len(jumps_to_patch)} patche(s)")
     write_patch(binary_file, jumps_to_patch)
     print("[*] Patching complete")
-

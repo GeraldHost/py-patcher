@@ -10,4 +10,4 @@ OPS = {
     "0x83": "CMP"
 }
 
-JMP_INSTRUCTIONS = [ 'jne', 'jze', 'jz', 'je' ]
+JMP_INSTRUCTIONS = ['jne', 'jze', 'jz', 'je']

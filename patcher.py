@@ -4,6 +4,7 @@ from utils import hexstr_to_hex, hexstr_to_int
 from opcodes import JMP_INSTRUCTIONS
 from objdump import Section
 
+
 class Patcher:
     def __init__(self, binary, offset):
         self.offset = offset
@@ -14,13 +15,13 @@ class Patcher:
     @staticmethod
     def section_has_caller(section, offset):
         for line in section.lines:
-            call_target = Patcher.get_call_target(line.asm) 
+            call_target = Patcher.get_call_target(line.asm)
             if not call_target:
                 continue
             if hexstr_to_int(call_target) == hexstr_to_int(offset):
                 return True
         return False
-    
+
     @staticmethod
     def get_call_target(asm):
         matches = re.match('call\\s([0-9a-zA-Z]{4})\\s', asm)
@@ -39,7 +40,7 @@ class Patcher:
         if not valid:
             print(f"[*] Invalid offset: {offset}")
             return
-        
+
         sections_with_callers = []
         for section in self.binary.values():
             if self.section_has_caller(section, offset):
@@ -49,11 +50,12 @@ class Patcher:
         return sections_with_callers
 
     def scan_jumps(self, section, offset=None):
-        patch_to_offset_n = self.offset_n if offset == None else hexstr_to_int(offset)
+        patch_to_offset_n = self.offset_n if offset == None else hexstr_to_int(
+            offset)
 
         lines_count = len(section.lines)
         for i in range(lines_count, 0, -1):
-            line = section.lines[i-1]
+            line = section.lines[i - 1]
             offset_n = hexstr_to_int(line.offset)
             if offset_n < patch_to_offset_n:
                 # check if this istruction is a jump instruction
@@ -71,8 +73,9 @@ class Patcher:
             n = hexstr_to_int(section_addr)
             if n >= self.offset_n:
                 print(f"[*] Offset found: {self.offset}")
-                key = list(section_addrs)[i-1]
+                key = list(section_addrs)[i - 1]
                 return self.binary[key]
+
 
 def patch(binary, offset):
     # find address in the binary to check it exists
@@ -85,6 +88,7 @@ def patch(binary, offset):
 
     patcher.scan_jumps(section)
     return patcher
+
 
 # Write the patches to the binary
 # @param []Lines array of lines to patch
@@ -103,4 +107,3 @@ def write_patch(filepath, patches):
             print(replace_byte)
             f.seek(hexstr_to_int(line.offset))
             f.write(replace_byte)
-    
