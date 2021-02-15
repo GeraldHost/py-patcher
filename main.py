@@ -2,7 +2,6 @@ import sys
 import json
 import argparse
 import os
-from opcodes import OPS
 from objdump import process
 from patcher import patch, write_patch
 from whaaaaat import prompt, print_json
@@ -34,7 +33,6 @@ def setup():
 
 if __name__ == "__main__":
     args = setup()
-
     target_addr = args.target
     binary_file = args.file
 
@@ -68,9 +66,10 @@ if __name__ == "__main__":
             'message': 'Select jump to patch:',
             'choices': choices
         }]
+
         answer = prompt(select_jump)
         jump_line = answer['patch_jump']
-        print(f"Applying patch to: {jump_line.asm}")
+        print(f"[*] Applying patch to: {jump_line.asm}")
         jump_line.patched = True
         jumps_to_patch.append(jump_line)
 
@@ -78,6 +77,5 @@ if __name__ == "__main__":
         if not answer['continue']:
             break
 
-    print(f"[*] Writing {len(jumps_to_patch)} patche(s)")
     write_patch(binary_file, jumps_to_patch)
-    print("[*] Patching complete")
+    print("[*] Patched through :: complete")
