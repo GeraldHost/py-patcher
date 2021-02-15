@@ -5,6 +5,7 @@ import os
 from objdump import process
 from patcher import patch, write_patch
 from whaaaaat import prompt, print_json
+from binary import Binary
 
 header = '''
   ___  _ _____ ___ _  _   __  __ ___   _____ _  _ ___  ___  _   _  ___ _  _ 
@@ -30,18 +31,7 @@ def setup():
 
     return args
 
-
-if __name__ == "__main__":
-    args = setup()
-    target_addr = args.target
-    binary_file = args.file
-
-    print(header)
-
-    with os.popen(f"objdump -M intel -d {binary_file}") as f:
-        binary = process(f)
-        patcher = patch(binary, target_addr)
-
+def manual_patch(patcher):
     confirm_cont = [{
         'type': 'confirm',
         'name': 'continue',
@@ -77,5 +67,32 @@ if __name__ == "__main__":
         if not answer['continue']:
             break
 
-    write_patch(binary_file, jumps_to_patch)
+    return jumps_to_patch
+
+# todo write temp file to test patch
+# if patch is successful then write name-patched
+# delete temp file
+if __name__ == "__main__":
+    args = setup()
+    target_addr = args.target
+    binary_file_path = args.file
+
+    print(header)
+
+    with os.popen(f"objdump -M intel -d {binary_file_path}") as f:
+        binary = process(f)
+        patcher = patch(binary, target_addr)
+    
+    jumps_to_patch = manual_patch(patcher)
+    
+    binary = Binary(binary_file_path)
+    binary.create_tmp_file()
+    worked = binary.try_patch(jumps_to_patch)
+
+    if worked:
+        print("[*] Patch succeeded")
+    else:
+        print("[*] patch failed") 
+        binary.cleanup()
+
     print("[*] Patched through :: complete")
