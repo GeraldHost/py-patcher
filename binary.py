@@ -11,7 +11,7 @@ class Binary:
     def __init__(self, filepath):
         self.filepath = self.remove_ext(filepath)
         self.tmp_filepath = f"{self.filepath}-patched" 
-        self.badboy_output = self.get_badboy_output()
+        self.badboy_outputs = self.get_badboy_outputs()
     
     @staticmethod
     def remove_ext(filepath):
@@ -35,19 +35,26 @@ class Binary:
                 f.seek(hexstr_to_int(line.offset))
                 f.write(replace_byte)
 
-    def try_patch(self, patches):
-        self.write_patch(self.tmp_filepath, patches)
-        worked = self.test_tmp_file()
-        return worked
+    def try_patches(self, patches):
+        for patch in patches:
+            self.write_patch(self.tmp_filepath, patch)
+            worked = self.test_tmp_file()
+            if worked:
+                return True
+        return False
 
-    def get_badboy_output(self):
-        try:
-            args = [f"./{self.filepath}", "password"]
-            res = Popen(args, stdout=PIPE)
-        except OSError:
-            return None 
-        res.wait()
-        return res.stdout.read()
+    def get_badboy_outputs(self):
+        ret = []
+        for arg in ["password", None]:
+            try:
+                args = filter(lambda x: x != None, [f"./{self.filepath}", arg])
+                res = Popen(args, stdout=PIPE)
+            except OSError:
+                return None 
+            res.wait()
+            output = res.stdout.read().strip()
+            ret.append(output)
+        return ret
 
     def test_tmp_file(self): 
         try:
@@ -60,8 +67,8 @@ class Binary:
         if res.returncode != 0:
             return False
 
-        output = res.stdout.read()
-        return output != self.badboy_output
+        output = res.stdout.read().strip()
+        return output not in self.badboy_outputs
     
     def cleanup(self):
         os.remove(self.tmp_filepath)

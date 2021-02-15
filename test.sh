@@ -1,1 +1,1 @@
-python3 main.py --target=0x120a --file=lockcode
+python3 main.py --target=0x120a --file=lockcode --fuzz
