@@ -5,9 +5,6 @@ It works so that it finds all the jump instructions that stand in the way of you
 you just tell it which one to patch. However that is super lame so the new idea is to FUZZ all possible combinations
 of the jump instructions until you end up at the goodboy function
 
-# Screenshot
-![py-patcher-screenshot](https://i.imgur.com/4KZiZMz.jpg)
-
 # Usage
 ```
 git clone https://github.com/GeraldHost/py-patcher && cd py-patcher
@@ -15,6 +12,9 @@ git clone https://github.com/GeraldHost/py-patcher && cd py-patcher
 ```
 python main.py --file=<path_to_binary> --target=<goodboy_offset>
 ```
+
+# Screenshot
+![py-patcher-screenshot](https://i.imgur.com/4KZiZMz.jpg)
 
 ### Notes
 - [http://ref.x86asm.net/coder64.html#x48](http://ref.x86asm.net/coder64.html#x48)
