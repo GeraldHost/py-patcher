@@ -4,6 +4,8 @@ from utils import hexstr_to_hex, hexstr_to_int
 from opcodes import JMP_INSTRUCTIONS
 from objdump import Section
 
+JE_BYTE = b"74"
+JNE_BYTE = b"75"    
 
 class Patcher:
     def __init__(self, binary, offset):
@@ -57,21 +59,20 @@ class Patcher:
         for i in range(lines_count, 0, -1):
             line = section.lines[i - 1]
             offset_n = hexstr_to_int(line.offset)
-            if offset_n < patch_to_offset_n:
-                # check if this istruction is a jump instruction
-                if line.instruction in JMP_INSTRUCTIONS:
-                    self.jumps.append(line)
+            # check if this istruction is a jump instruction
+            if offset_n < patch_to_offset_n and line.instruction in JMP_INSTRUCTIONS:
+                self.jumps.append(line)
 
         sections_with_callers = self.find_callers(section.offset)
         for section in sections_with_callers:
             self.scan_jumps(section, section.lines[-1].offset)
 
     def findoffset(self):
-        section_addrs = self.binary.keys()
         print(f"[*] Finding offset: {self.offset}")
+
+        section_addrs = self.binary.keys()
         for i, section_addr in enumerate(section_addrs):
-            n = hexstr_to_int(section_addr)
-            if n >= self.offset_n:
+            if hexstr_to_int(section_addr) >= self.offset_n:
                 print(f"[*] Offset found: {self.offset}")
                 key = list(section_addrs)[i - 1]
                 return self.binary[key]
@@ -93,17 +94,16 @@ def patch(binary, offset):
 # Write the patches to the binary
 # @param []Lines array of lines to patch
 def write_patch(filepath, patches):
-    je_byte = b"74"
-    jne_byte = b"75"
+    print(f"[*] Writing {len(jumps_to_patch)} patche(s)")
 
     with open(filepath, 'r+b') as f:
         for line in patches:
             f.seek(hexstr_to_int(line.offset))
             byte = f.read(1)
-            print(byte)
+            
             hexdata = binascii.hexlify(byte)
-            replace_byte = jne_byte if hexdata == je_byte else je_byte
+            replace_byte = JNE_BYTE if hexdata == JE_BYTE else JE_BYTE
             replace_byte = binascii.unhexlify(replace_byte)
-            print(replace_byte)
+            
             f.seek(hexstr_to_int(line.offset))
             f.write(replace_byte)
