@@ -1,4 +1,5 @@
 import re
+import binascii
 from utils import hexstr_to_hex, hexstr_to_int
 from opcodes import JMP_INSTRUCTIONS
 from objdump import Section
@@ -84,3 +85,22 @@ def patch(binary, offset):
 
     patcher.scan_jumps(section)
     return patcher
+
+# Write the patches to the binary
+# @param []Lines array of lines to patch
+def write_patch(filepath, patches):
+    je_byte = b"74"
+    jne_byte = b"75"
+
+    with open(filepath, 'r+b') as f:
+        for line in patches:
+            f.seek(hexstr_to_int(line.offset))
+            byte = f.read(1)
+            print(byte)
+            hexdata = binascii.hexlify(byte)
+            replace_byte = jne_byte if hexdata == je_byte else je_byte
+            replace_byte = binascii.unhexlify(replace_byte)
+            print(replace_byte)
+            f.seek(hexstr_to_int(line.offset))
+            f.write(replace_byte)
+    
