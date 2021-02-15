@@ -94,7 +94,7 @@ def patch(binary, offset):
 # Write the patches to the binary
 # @param []Lines array of lines to patch
 def write_patch(filepath, patches):
-    print(f"[*] Writing {len(jumps_to_patch)} patche(s)")
+    print(f"[*] Writing {len(patches)} patche(s)")
 
     with open(filepath, 'r+b') as f:
         for line in patches:
