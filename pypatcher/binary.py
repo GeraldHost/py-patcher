@@ -2,7 +2,8 @@ import binascii
 import os
 from shutil import copy 
 from subprocess import Popen, PIPE
-from utils import hexstr_to_int
+
+from .utils import hexstr_to_int
 
 JE_BYTE = b"74"
 JNE_BYTE = b"75"    

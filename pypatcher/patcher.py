@@ -1,8 +1,9 @@
 import re
 import binascii
-from utils import hexstr_to_hex, hexstr_to_int
-from opcodes import JMP_INSTRUCTIONS
-from objdump import Section
+
+from .utils import hexstr_to_hex, hexstr_to_int
+from .opcodes import JMP_INSTRUCTIONS
+from .objdump import Section
 
 JE_BYTE = b"74"
 JNE_BYTE = b"75"    

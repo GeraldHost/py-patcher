@@ -1,7 +1,8 @@
 import sys
 import re
 import json
-from utils import hexstr_to_hex
+
+from .utils import hexstr_to_hex
 
 line_re = re.compile('([0-9a-zA-Z]+:)(\\t*\\s*)(([a-zA-Z0-9]{2}\\s)+)')
 section_title_re = re.compile('[0-9A-Za-z]{16}\\s+<(.*[^>])>')

@@ -2,12 +2,13 @@ import sys
 import json
 import argparse
 import os
-from objdump import process
-from patcher import patch, write_patch
-from whaaaaat import prompt, print_json
-from binary import Binary
 from itertools import product 
-from utils import str2bool
+from whaaaaat import prompt, print_json
+
+from .objdump import process
+from .patcher import patch, write_patch
+from .binary import Binary
+from .utils import str2bool
 
 header = '''
 ------------------------------------------------
@@ -97,7 +98,7 @@ def fuzz_patches(patcher):
 # todo write temp file to test patch
 # if patch is successful then write name-patched
 # delete temp file
-if __name__ == "__main__":
+def run():
     args = setup()
     target_addr = args.target
     binary_file_path = args.file
