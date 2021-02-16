@@ -12,11 +12,15 @@ Update: we can now fuzz the jump instructions with `--fuzz`
 git clone https://github.com/GeraldHost/py-patcher && cd py-patcher
 ```
 ```
-python main.py --file=<path_to_binary> --target=<goodboy_offset> --fuzz
+python -m pypatcher --file=<path_to_binary> --target=<goodboy_offset> --fuzz
 ```
 
 # Screenshot
-![py-patcher-screenshot](https://i.imgur.com/4KZiZMz.jpg)
+Running in normal mode where you have to manually select which jump command to patch
+![py-patcher-screenshot](https://i.imgur.com/2DJEMna.png)
+Running with the `--fuzz` options enabled where pypatcher will try and fuzz which jump commands need patching to get to
+the good boy function
+![py-patcher-screenshot-2](https://i.imgur.com/A2DQUX8.png)
 
 ### Notes
 - [http://ref.x86asm.net/coder64.html#x48](http://ref.x86asm.net/coder64.html#x48)
