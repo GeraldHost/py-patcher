@@ -17,10 +17,13 @@ python -m pypatcher --file=<path_to_binary> --target=<goodboy_offset> --fuzz
 
 # Screenshot
 Running in normal mode where you have to manually select which jump command to patch
-![py-patcher-screenshot](https://i.imgur.com/2DJEMna.png)
+
+<img src="https://i.imgur.com/2DJEMna.png" alt="py-patcher-screenshot" width="60%"/>
+
 Running with the `--fuzz` options enabled where pypatcher will try and fuzz which jump commands need patching to get to
 the good boy function
-![py-patcher-screenshot-2](https://i.imgur.com/A2DQUX8.png)
+
+<img src="https://i.imgur.com/A2DQUX8.png" alt="py-patcher-screenshot-2" width="60%"/>
 
 ### Notes
 - [http://ref.x86asm.net/coder64.html#x48](http://ref.x86asm.net/coder64.html#x48)
