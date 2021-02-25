@@ -1,11 +1,12 @@
 # Py Patcher
-Attempt to write an semi-automated python patcher. Originally the idea was to automatically figure out whay jump
-instructions need to be patched in order to get to the goodboy function. However this was a total headache. So far
-It works so that it finds all the jump instructions that stand in the way of you and the goodboy function and then
-you just tell it which one to patch. However that is super lame so the new idea is to FUZZ all possible combinations
-of the jump instructions until you end up at the goodboy function
+### Automating patches to binary files
+Attempt to write an semi-automated python patcher. Originally the idea was to automatically figure out what jump
+instructions need to be patched in order to get to the goodboy function. However this was a total headache. Instead there are two ways
+to patch the binary. 
 
-Update: we can now fuzz the jump instructions with `--fuzz`
+One finds all the jump instructions, lists them out and allows the user to select which ones to patch
+
+The second uses the `--fuzz` flag to try every combination of "jump if equal" and "jump if not equal" commands until it find the combination that leads to the goodboy function.
 
 # Usage
 ```
